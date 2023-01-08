@@ -53,7 +53,7 @@ export class AuthService {
     }
 
     const salt = await genSalt(10);
-    const newUser = new this.userModel({
+    const newUser = await this.userModel.create({
       email: dto.email,
       password: await hash(dto.password, salt),
     });
