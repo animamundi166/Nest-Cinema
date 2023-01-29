@@ -68,25 +68,24 @@ export class AuthService {
 
   async validateUser(dto: AuthDto): Promise<UserDocument> {
     const user = await this.userModel.findOne({ email: dto.email });
-    if (!user) {
-      throw new UnauthorizedException('User not found');
+    const isValidPassword = await compare(dto.password, user.password);
+
+    if (user && isValidPassword) {
+      return user;
     }
 
-    const isValidPassword = await compare(dto.password, user.password);
-    if (!isValidPassword) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-    return user;
+    throw new UnauthorizedException('Invalid credentials');
   }
 
   async issueTokenPair(userId: string) {
     const data = { _id: userId };
 
+    const accessToken = await this.jwtService.signAsync(data, {
+      expiresIn: '3h',
+    });
+
     const refreshToken = await this.jwtService.signAsync(data, {
       expiresIn: '15d',
-    });
-    const accessToken = await this.jwtService.signAsync(data, {
-      expiresIn: '1h',
     });
 
     return { refreshToken, accessToken };

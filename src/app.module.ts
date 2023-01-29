@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { getMongoConfig } from './config/mongo.config';
+import { GenreModule } from './genre/genre.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { getMongoConfig } from './config/mongo.config';
     }),
     AuthModule,
     UserModule,
+    GenreModule,
   ],
   controllers: [],
   providers: [],

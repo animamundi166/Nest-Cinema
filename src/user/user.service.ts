@@ -12,7 +12,7 @@ export class UserService {
   async byId(_id: string) {
     const user = await this.userModel.findById(_id);
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('User is not found');
     }
     return user;
   }
@@ -39,7 +39,7 @@ export class UserService {
   }
 
   async getCount() {
-    const count = this.userModel.find().count();
+    const count = await this.userModel.find().count();
     return count;
   }
 
@@ -57,15 +57,13 @@ export class UserService {
 
     return this.userModel
       .find(options)
-      .select('-password, -updatedAt, -__v')
+      .select('-password -updatedAt -__v')
       .sort({
         createdAt: 'desc',
-      })
-      .exec();
+      });
   }
 
   async deleteUser(id: string) {
-    const deleted = await this.userModel.findByIdAndDelete(id);
-    return deleted;
+    await this.userModel.findByIdAndDelete(id);
   }
 }
