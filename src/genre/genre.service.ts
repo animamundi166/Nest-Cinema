@@ -1,5 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateGenreDto } from './dto/create-genre.dto';
@@ -20,7 +19,7 @@ export class GenreService {
   }
 
   async create() {
-    const defaultValue = {
+    const defaultValue: CreateGenreDto = {
       name: '',
       slug: '',
       description: '',
