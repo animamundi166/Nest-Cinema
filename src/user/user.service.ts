@@ -7,7 +7,9 @@ import { User, UserDocument } from './user.schema';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private readonly userModel: Model<UserDocument>
+  ) {}
 
   async byId(_id: string) {
     const user = await this.userModel.findById(_id);
@@ -39,7 +41,7 @@ export class UserService {
   }
 
   async getCount() {
-    const count = await this.userModel.find().count();
+    const count = await this.userModel.countDocuments();
     return count;
   }
 

@@ -7,15 +7,15 @@ import { ActorDto } from './dto/actor.dto';
 @Injectable()
 export class ActorService {
   constructor(
-    @InjectModel(Actor.name) private actorModel: Model<ActorDocument>
+    @InjectModel(Actor.name) private readonly actorModel: Model<ActorDocument>
   ) {}
 
   async bySlug(slug: string) {
-    const slugFounded = await this.actorModel.findOne({ slug });
-    if (!slugFounded) {
+    const doc = await this.actorModel.findOne({ slug });
+    if (!doc) {
       throw new NotFoundException('Slug is not found');
     }
-    return slugFounded;
+    return doc;
   }
 
   async getAll(searchTerm?: string) {
@@ -39,11 +39,11 @@ export class ActorService {
   }
 
   async byId(_id: string) {
-    const actor = await this.actorModel.findById(_id);
-    if (!actor) {
+    const doc = await this.actorModel.findById(_id);
+    if (!doc) {
       throw new NotFoundException('Actor is not found');
     }
-    return actor;
+    return doc;
   }
 
   async create() {
@@ -57,20 +57,20 @@ export class ActorService {
   }
 
   async update(_id: string, dto: ActorDto) {
-    const updated = await this.actorModel.findByIdAndUpdate(_id, dto, {
+    const doc = await this.actorModel.findByIdAndUpdate(_id, dto, {
       new: true,
     });
-    if (!updated) {
+    if (!doc) {
       throw new NotFoundException('Actor is not found');
     }
-    return updated;
+    return doc;
   }
 
   async delete(id: string) {
-    const deleted = await this.actorModel.findByIdAndDelete(id);
-    if (!deleted) {
+    const doc = await this.actorModel.findByIdAndDelete(id);
+    if (!doc) {
       throw new NotFoundException('Actor is not found');
     }
-    return deleted;
+    return doc;
   }
 }

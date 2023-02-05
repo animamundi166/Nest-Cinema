@@ -35,14 +35,12 @@ export class ActorController {
     return this.actorService.byId(id);
   }
 
-  @UsePipes(new ValidationPipe())
   @Post()
   @Auth('admin')
   async createGenre() {
     return this.actorService.create();
   }
 
-  @UsePipes(new ValidationPipe())
   @Put(':id')
   @Auth('admin')
   async updateGenre(

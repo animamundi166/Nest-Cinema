@@ -7,15 +7,15 @@ import { Genre, GenreDocument } from './genre.schema';
 @Injectable()
 export class GenreService {
   constructor(
-    @InjectModel(Genre.name) private genreModel: Model<GenreDocument>
+    @InjectModel(Genre.name) private readonly genreModel: Model<GenreDocument>
   ) {}
 
   async byId(_id: string) {
-    const genre = await this.genreModel.findById(_id);
-    if (!genre) {
+    const doc = await this.genreModel.findById(_id);
+    if (!doc) {
       throw new NotFoundException('Genre is not found');
     }
-    return genre;
+    return doc;
   }
 
   async create() {
@@ -36,11 +36,11 @@ export class GenreService {
   }
 
   async bySlug(slug: string) {
-    const slugFounded = await this.genreModel.findOne({ slug });
-    if (!slugFounded) {
+    const doc = await this.genreModel.findOne({ slug });
+    if (!doc) {
       throw new NotFoundException('Slug is not found');
     }
-    return slugFounded;
+    return doc;
   }
 
   async getAll(searchTerm?: string) {
@@ -66,21 +66,21 @@ export class GenreService {
     });
   }
 
-  async updateGenre(_id: string, dto: CreateGenreDto) {
-    const updated = await this.genreModel.findByIdAndUpdate(_id, dto, {
+  async update(_id: string, dto: CreateGenreDto) {
+    const doc = await this.genreModel.findByIdAndUpdate(_id, dto, {
       new: true,
     });
-    if (!updated) {
+    if (!doc) {
       throw new NotFoundException('Genre is not found');
     }
-    return updated;
+    return doc;
   }
 
-  async deleteGenre(id: string) {
-    const deleted = await this.genreModel.findByIdAndDelete(id);
-    if (!deleted) {
+  async delete(id: string) {
+    const doc = await this.genreModel.findByIdAndDelete(id);
+    if (!doc) {
       throw new NotFoundException('Genre is not found');
     }
-    return deleted;
+    return doc;
   }
 }

@@ -7,8 +7,6 @@ import {
   Post,
   Delete,
   Query,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { Auth } from 'src/auth/decorator/auth.decorator';
 import { ValidateMongoIdPipe } from 'src/pipes/IdValidation.pipe';
@@ -40,26 +38,24 @@ export class GenreController {
     return this.genreService.byId(id);
   }
 
-  @UsePipes(new ValidationPipe())
   @Post()
   @Auth('admin')
-  async createGenre() {
+  async create() {
     return this.genreService.create();
   }
 
-  @UsePipes(new ValidationPipe())
   @Put(':id')
   @Auth('admin')
-  async updateGenre(
+  async update(
     @Param('id', ValidateMongoIdPipe) id: string,
     @Body() dto: CreateGenreDto
   ) {
-    return this.genreService.updateGenre(id, dto);
+    return this.genreService.update(id, dto);
   }
 
   @Delete(':id')
   @Auth('admin')
-  async deleteGenre(@Param('id', ValidateMongoIdPipe) id: string) {
-    return this.genreService.deleteGenre(id);
+  async delete(@Param('id', ValidateMongoIdPipe) id: string) {
+    return this.genreService.delete(id);
   }
 }

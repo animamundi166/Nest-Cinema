@@ -6,8 +6,6 @@ import {
   Put,
   Delete,
   Query,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { Auth } from 'src/auth/decorator/auth.decorator';
 import { ValidateMongoIdPipe } from 'src/pipes/IdValidation.pipe';
@@ -43,14 +41,12 @@ export class UserController {
     return this.userService.getAll(searchTerm);
   }
 
-  @UsePipes(new ValidationPipe())
   @Put('profile')
   @Auth()
   async updateProfile(@User('_id') _id: string, @Body() dto: UpdateUserDto) {
     return this.userService.updateProfile(_id, dto);
   }
 
-  @UsePipes(new ValidationPipe())
   @Put(':id')
   @Auth('admin')
   async updateUser(
