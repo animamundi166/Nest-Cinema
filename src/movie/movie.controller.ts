@@ -12,6 +12,7 @@ import {
 import { ObjectId } from 'mongoose';
 import { Auth } from 'src/auth/decorator/auth.decorator';
 import { ValidateMongoIdPipe } from 'src/pipes/IdValidation.pipe';
+import { genreIdsDto } from './dto/genreIds.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MovieService } from './movie.service';
 
@@ -31,10 +32,7 @@ export class MovieController {
 
   @Post('by-genres')
   @HttpCode(200)
-  async byGenres(
-    @Body('genreIds', ValidateMongoIdPipe)
-    genreIds: ObjectId[]
-  ) {
+  async byGenres(@Body() genreIds: genreIdsDto) {
     return this.movieService.byGenres(genreIds);
   }
 

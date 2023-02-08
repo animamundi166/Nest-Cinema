@@ -16,7 +16,7 @@ class Parameters {
   country: string;
 }
 
-@Schema({ timestamps: true })
+@Schema()
 export class Movie {
   @Prop()
   poster: string;

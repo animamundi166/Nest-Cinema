@@ -33,9 +33,23 @@ export class ActorService {
       };
     }
 
-    return this.actorModel.find(options).select('-updatedAt -__v').sort({
-      createdAt: 'desc',
-    });
+    return this.actorModel
+      .aggregate()
+      .match(options)
+      .lookup({
+        from: 'Movie',
+        foreignField: 'actors',
+        localField: '_id',
+        as: 'movies',
+      })
+      .addFields({
+        countMovies: {
+          $size: '$movies',
+        },
+      })
+      .sort({
+        createdAt: -1,
+      });
   }
 
   async byId(_id: string) {
