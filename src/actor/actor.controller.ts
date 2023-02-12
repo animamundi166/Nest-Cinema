@@ -7,8 +7,6 @@ import {
   Post,
   Delete,
   Query,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { Auth } from 'src/auth/decorator/auth.decorator';
 import { ValidateMongoIdPipe } from 'src/pipes/IdValidation.pipe';

@@ -6,11 +6,15 @@ import {
   Put,
   Delete,
   Query,
+  HttpCode,
+  Post,
 } from '@nestjs/common';
+import { Types } from 'mongoose';
 import { Auth } from 'src/auth/decorator/auth.decorator';
 import { ValidateMongoIdPipe } from 'src/pipes/IdValidation.pipe';
 import { User } from './decorators/user.decorator';
 import { UpdateUserDto } from './dto/updateUser.dto';
+import { UserDocument } from './user.schema';
 import { UserService } from './user.service';
 
 @Controller('users')
@@ -60,5 +64,21 @@ export class UserController {
   @Auth('admin')
   async deleteUser(@Param('id', ValidateMongoIdPipe) id: string) {
     return this.userService.deleteUser(id);
+  }
+
+  @Get('profile/favourites')
+  @Auth()
+  async getFavourites(@User('_id') _id: Types.ObjectId) {
+    return this.userService.getFavouriteMovies(_id);
+  }
+
+  @Post('profile/favourites')
+  @HttpCode(200)
+  @Auth()
+  async toggleFavourite(
+    @Body('movieId', ValidateMongoIdPipe) movieId: Types.ObjectId,
+    @User() user: UserDocument
+  ) {
+    return this.userService.toggleFavourite(movieId, user);
   }
 }

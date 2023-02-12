@@ -9,10 +9,10 @@ import {
   Query,
   HttpCode,
 } from '@nestjs/common';
-import { ObjectId } from 'mongoose';
+import { Types } from 'mongoose';
 import { Auth } from 'src/auth/decorator/auth.decorator';
 import { ValidateMongoIdPipe } from 'src/pipes/IdValidation.pipe';
-import { genreIdsDto } from './dto/genreIds.dto';
+import { GenreIdsDto } from './dto/genreIds.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MovieService } from './movie.service';
 
@@ -26,13 +26,18 @@ export class MovieController {
   }
 
   @Get('by-actor/:actorId')
-  async byActor(@Param('actorId', ValidateMongoIdPipe) actorId: ObjectId) {
+  async byActor(
+    @Param('actorId', ValidateMongoIdPipe) actorId: Types.ObjectId
+  ) {
     return this.movieService.byActor(actorId);
   }
 
   @Post('by-genres')
   @HttpCode(200)
-  async byGenres(@Body() genreIds: genreIdsDto) {
+  async byGenres(
+    @Body()
+    { genreIds }: GenreIdsDto
+  ) {
     return this.movieService.byGenres(genreIds);
   }
 
@@ -48,7 +53,7 @@ export class MovieController {
 
   @Get(':id')
   @Auth('admin')
-  async getById(@Param('id', ValidateMongoIdPipe) id: string) {
+  async getById(@Param('id') id: string) {
     return this.movieService.byId(id);
   }
 

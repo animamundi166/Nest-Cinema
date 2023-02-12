@@ -1,7 +1,8 @@
-import { IsMongoId } from 'class-validator';
-import { ObjectId } from 'mongoose';
+import { IsMongoId, IsNotEmpty } from 'class-validator';
+import { Types } from 'mongoose';
 
-export class genreIdsDto {
+export class GenreIdsDto {
+  @IsNotEmpty()
   @IsMongoId({ each: true })
-  genreIds: ObjectId[];
+  genreIds: Types.ObjectId[];
 }

@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
-import { genreIdsDto } from './dto/genreIds.dto';
+import { Model, Types } from 'mongoose';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie, MovieDocument } from './movie.schema';
 
@@ -45,7 +44,7 @@ export class MovieService {
     return doc;
   }
 
-  async byActor(actorId: ObjectId) {
+  async byActor(actorId: Types.ObjectId) {
     const doc = await this.movieModel.find({ actors: actorId });
 
     if (!doc) {
@@ -55,7 +54,7 @@ export class MovieService {
     return doc;
   }
 
-  async byGenres(genreIds: genreIdsDto) {
+  async byGenres(genreIds: Types.ObjectId[]) {
     const doc = await this.movieModel.find({
       genres: { $in: genreIds },
     });
@@ -76,8 +75,8 @@ export class MovieService {
     return doc;
   }
 
-  async byId(_id: string) {
-    const movie = await this.movieModel.findById(_id);
+  async byId(id: string) {
+    const movie = await this.movieModel.findById(id);
     if (!movie) {
       throw new NotFoundException('Movie is not found');
     }

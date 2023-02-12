@@ -4,12 +4,12 @@ import {
   ArgumentMetadata,
   BadRequestException,
 } from '@nestjs/common';
-import { isValidObjectId, ObjectId } from 'mongoose';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class ValidateMongoIdPipe implements PipeTransform {
-  transform(value: ObjectId, metadata: ArgumentMetadata) {
-    if (!isValidObjectId(value)) {
+  transform(value: string, metadata: ArgumentMetadata) {
+    if (!Types.ObjectId.isValid(value)) {
       throw new BadRequestException(`${metadata.data} must be a valid`);
     }
 

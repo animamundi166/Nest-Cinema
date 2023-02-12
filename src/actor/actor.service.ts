@@ -18,9 +18,49 @@ export class ActorService {
     return doc;
   }
 
+  // async getAll(searchTerm?: string) {
+  //   let options = {};
+  //   if (searchTerm) {
+  //     options = {
+  //       $or: [
+  //         {
+  //           name: new RegExp(searchTerm, 'i'),
+  //         },
+  //         {
+  //           slug: new RegExp(searchTerm, 'i'),
+  //         },
+  //       ],
+  //     };
+  //   }
+
+  //   const pipeline = [
+  //     { $match: options },
+  //     {
+  //       $lookup: {
+  //         from: 'Movie',
+  //         foreignField: 'actors',
+  //         localField: '_id',
+  //         as: 'movies',
+  //       },
+  //     },
+  //     {
+  //       $addFields: {
+  //         countMovies: {
+  //           $size: '$movies',
+  //         },
+  //       },
+  //     },
+  //     { $project: { __v: 0 } },
+  //   ];
+
+  //   const aggregated = this.actorModel.aggregate(pipeline);
+  //   return aggregated;
+  // }
+
   async getAll(searchTerm?: string) {
     let options = {};
-    if (searchTerm) {
+
+    if (searchTerm)
       options = {
         $or: [
           {
@@ -31,25 +71,28 @@ export class ActorService {
           },
         ],
       };
-    }
 
-    return this.actorModel
-      .aggregate()
-      .match(options)
-      .lookup({
-        from: 'Movie',
-        foreignField: 'actors',
-        localField: '_id',
-        as: 'movies',
-      })
-      .addFields({
-        countMovies: {
-          $size: '$movies',
-        },
-      })
-      .sort({
-        createdAt: -1,
-      });
+    return (
+      this.actorModel
+        .aggregate()
+        // .match(options)
+        .lookup({
+          from: 'Movie',
+          localField: '_id',
+          foreignField: 'actors',
+          as: 'movies',
+        })
+        .addFields({
+          countMovies: {
+            $size: '$movies',
+          },
+        })
+        .project({ __v: 0, updatedAt: 0 })
+        .sort({
+          createdAt: -1,
+        })
+        .exec()
+    );
   }
 
   async byId(_id: string) {
