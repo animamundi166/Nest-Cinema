@@ -30,7 +30,7 @@ export class Movie {
   @Prop({ unique: true })
   slug: string;
 
-  @Prop({ default: 5.0 })
+  @Prop({ default: 0 })
   rating?: number;
 
   @Prop({ default: 0 })

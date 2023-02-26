@@ -22,19 +22,18 @@ export class RatingService {
     return doc;
   }
 
-  async averageMovieByMovie(movieId: Types.ObjectId) {
+  async averageRatingByMovie(movieId: Types.ObjectId) {
     const ratingMovie = await this.ratingModel.aggregate([
       { $match: { movieId } },
+      {
+        $group: {
+          _id: '$movieId',
+          averageQty: { $avg: '$value' },
+        },
+      },
     ]);
 
-    console.log(ratingMovie);
-
-    const accRatingMovie = ratingMovie.reduce(
-      (acc, item) => acc + item.value,
-      0
-    );
-    const avgRatingMovie = accRatingMovie / ratingMovie.length;
-    return avgRatingMovie;
+    return ratingMovie[0].averageQty;
   }
 
   async setRating(userId: Types.ObjectId, dto: RatingDto) {
@@ -42,12 +41,12 @@ export class RatingService {
 
     const newRating = await this.ratingModel.findOneAndUpdate(
       { movieId, userId },
-      { movieId, userId, value },
+      { movieId, value },
       { new: true, upsert: true, setDefaultsOnInsert: true }
     );
 
-    const avegageRating = await this.averageMovieByMovie(movieId);
-    await this.movieService.updateRating(movieId, avegageRating);
+    const averageRating = await this.averageRatingByMovie(movieId);
+    await this.movieService.updateRating(movieId, averageRating);
 
     return newRating;
   }

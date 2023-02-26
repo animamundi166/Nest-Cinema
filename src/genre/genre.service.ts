@@ -1,13 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { MovieService } from 'src/movie/movie.service';
 import { CreateGenreDto } from './dto/create-genre.dto';
+import { ICollection } from './genre.interface';
 import { Genre, GenreDocument } from './genre.schema';
 
 @Injectable()
 export class GenreService {
   constructor(
-    @InjectModel(Genre.name) private readonly genreModel: Model<GenreDocument>
+    @InjectModel(Genre.name) private readonly genreModel: Model<GenreDocument>,
+    private readonly movieService: MovieService
   ) {}
 
   async byId(_id: string) {
@@ -27,12 +30,6 @@ export class GenreService {
     };
     const genre = await this.genreModel.create(defaultValue);
     return genre._id;
-  }
-
-  async getCollections() {
-    const genres = await this.getAll();
-    const collections = genres;
-    return collections;
   }
 
   async bySlug(slug: string) {
@@ -64,6 +61,27 @@ export class GenreService {
     return this.genreModel.find(options).select('-updatedAt -__v').sort({
       createdAt: 'desc',
     });
+  }
+
+  async getCollections() {
+    const genres = await this.getAll();
+
+    const collections: ICollection[] = await Promise.all(
+      genres.map(async (genre) => {
+        const moviesByGenre = await this.movieService.byGenres([genre._id]);
+
+        const result: ICollection = {
+          _id: String(genre._id),
+          title: genre.name,
+          slug: genre.slug,
+          image: moviesByGenre[0].bigPoster,
+        };
+
+        return result;
+      })
+    );
+
+    return collections;
   }
 
   async update(_id: string, dto: CreateGenreDto) {
