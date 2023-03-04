@@ -27,13 +27,14 @@ export class UserService {
       throw new NotFoundException('email is busy');
     }
 
+    user.email = dto.email;
+
     if (dto.password) {
       const salt = await genSalt(10);
       user.password = await hash(dto.password, salt);
     }
 
-    user.email = dto.email;
-    if (dto.isAdmin || dto.isAdmin === false) {
+    if (dto.isAdmin) {
       user.isAdmin = dto.isAdmin;
     }
 

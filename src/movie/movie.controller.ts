@@ -21,20 +21,18 @@ export class MovieController {
   constructor(private readonly movieService: MovieService) {}
 
   @Get('by-slug/:slug')
-  async bySlug(@Param('slug') slug: string) {
+  bySlug(@Param('slug') slug: string) {
     return this.movieService.bySlug(slug);
   }
 
   @Get('by-actor/:actorId')
-  async byActor(
-    @Param('actorId', ValidateMongoIdPipe) actorId: Types.ObjectId
-  ) {
+  byActor(@Param('actorId', ValidateMongoIdPipe) actorId: Types.ObjectId) {
     return this.movieService.byActor(actorId);
   }
 
   @Post('by-genres')
   @HttpCode(200)
-  async byGenres(
+  byGenres(
     @Body()
     { genreIds }: GenreIdsDto
   ) {
@@ -42,30 +40,30 @@ export class MovieController {
   }
 
   @Get()
-  async getAll(@Query('searchTerm') searchTerm?: string) {
+  getAll(@Query('searchTerm') searchTerm?: string) {
     return this.movieService.getAll(searchTerm);
   }
 
   @Get('most-popular')
-  async getMostPopular() {
+  getMostPopular() {
     return this.movieService.getMostPopular();
   }
 
   @Get(':id')
   @Auth('admin')
-  async getById(@Param('id') id: string) {
+  getById(@Param('id') id: string) {
     return this.movieService.byId(id);
   }
 
   @Post()
   @Auth('admin')
-  async create() {
+  create() {
     return this.movieService.create();
   }
 
   @Put(':id')
   @Auth('admin')
-  async update(
+  update(
     @Param('id', ValidateMongoIdPipe) id: string,
     @Body() dto: UpdateMovieDto
   ) {
@@ -74,7 +72,7 @@ export class MovieController {
 
   @Delete(':id')
   @Auth('admin')
-  async delete(@Param('id', ValidateMongoIdPipe) id: string) {
+  delete(@Param('id', ValidateMongoIdPipe) id: string) {
     return this.movieService.delete(id);
   }
 }

@@ -18,35 +18,35 @@ export class GenreController {
   constructor(private readonly genreService: GenreService) {}
 
   @Get('by-slug/:slug')
-  async bySlug(@Param('slug') slug: string) {
+  bySlug(@Param('slug') slug: string) {
     return this.genreService.bySlug(slug);
   }
 
   @Get('/collections')
-  async getCollections() {
+  getCollections() {
     return this.genreService.getCollections();
   }
 
   @Get()
-  async getAll(@Query('searchTerm') searchTerm?: string) {
+  getAll(@Query('searchTerm') searchTerm?: string) {
     return this.genreService.getAll(searchTerm);
   }
 
   @Get(':id')
   @Auth('admin')
-  async getById(@Param('id', ValidateMongoIdPipe) id: string) {
+  getById(@Param('id', ValidateMongoIdPipe) id: string) {
     return this.genreService.byId(id);
   }
 
   @Post()
   @Auth('admin')
-  async create() {
+  create() {
     return this.genreService.create();
   }
 
   @Put(':id')
   @Auth('admin')
-  async update(
+  update(
     @Param('id', ValidateMongoIdPipe) id: string,
     @Body() dto: CreateGenreDto
   ) {
@@ -55,7 +55,7 @@ export class GenreController {
 
   @Delete(':id')
   @Auth('admin')
-  async delete(@Param('id', ValidateMongoIdPipe) id: string) {
+  delete(@Param('id', ValidateMongoIdPipe) id: string) {
     return this.genreService.delete(id);
   }
 }

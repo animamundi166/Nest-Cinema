@@ -23,37 +23,37 @@ export class UserController {
 
   @Get('profile')
   @Auth()
-  async getProfile(@User('_id') _id: string) {
+  getProfile(@User('_id') _id: string) {
     return this.userService.byId(_id);
   }
 
   @Get('count')
   @Auth('admin')
-  async getCountUsers() {
+  getCountUsers() {
     return this.userService.getCount();
   }
 
   @Get(':id')
   @Auth('admin')
-  async getUser(@Param('id', ValidateMongoIdPipe) id: string) {
+  getUser(@Param('id', ValidateMongoIdPipe) id: string) {
     return this.userService.byId(id);
   }
 
   @Get()
   @Auth('admin')
-  async getUsers(@Query('searchTerm') searchTerm?: string) {
+  getUsers(@Query('searchTerm') searchTerm?: string) {
     return this.userService.getAll(searchTerm);
   }
 
   @Put('profile')
   @Auth()
-  async updateProfile(@User('_id') _id: string, @Body() dto: UpdateUserDto) {
+  updateProfile(@User('_id') _id: string, @Body() dto: UpdateUserDto) {
     return this.userService.updateProfile(_id, dto);
   }
 
   @Put(':id')
   @Auth('admin')
-  async updateUser(
+  updateUser(
     @Param('id', ValidateMongoIdPipe) id: string,
     @Body() dto: UpdateUserDto
   ) {
@@ -62,20 +62,20 @@ export class UserController {
 
   @Delete(':id')
   @Auth('admin')
-  async deleteUser(@Param('id', ValidateMongoIdPipe) id: string) {
+  deleteUser(@Param('id', ValidateMongoIdPipe) id: string) {
     return this.userService.deleteUser(id);
   }
 
   @Get('profile/favourites')
   @Auth()
-  async getFavourites(@User('_id') _id: Types.ObjectId) {
+  getFavourites(@User('_id') _id: Types.ObjectId) {
     return this.userService.getFavouriteMovies(_id);
   }
 
   @Post('profile/favourites')
   @HttpCode(200)
   @Auth()
-  async toggleFavourite(
+  toggleFavourite(
     @Body('movieId', ValidateMongoIdPipe) movieId: Types.ObjectId,
     @User() user: UserDocument
   ) {

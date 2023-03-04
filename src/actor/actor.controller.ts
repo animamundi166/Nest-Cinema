@@ -18,30 +18,30 @@ export class ActorController {
   constructor(private readonly actorService: ActorService) {}
 
   @Get('by-slug/:slug')
-  async bySlug(@Param('slug') slug: string) {
+  bySlug(@Param('slug') slug: string) {
     return this.actorService.bySlug(slug);
   }
 
   @Get()
-  async getAll(@Query('searchTerm') searchTerm?: string) {
+  getAll(@Query('searchTerm') searchTerm?: string) {
     return this.actorService.getAll(searchTerm);
   }
 
   @Get(':id')
   @Auth('admin')
-  async getById(@Param('id', ValidateMongoIdPipe) id: string) {
+  getById(@Param('id', ValidateMongoIdPipe) id: string) {
     return this.actorService.byId(id);
   }
 
   @Post()
   @Auth('admin')
-  async createGenre() {
+  createGenre() {
     return this.actorService.create();
   }
 
   @Put(':id')
   @Auth('admin')
-  async updateGenre(
+  updateGenre(
     @Param('id', ValidateMongoIdPipe) id: string,
     @Body() dto: ActorDto
   ) {
@@ -50,7 +50,7 @@ export class ActorController {
 
   @Delete(':id')
   @Auth('admin')
-  async deleteGenre(@Param('id', ValidateMongoIdPipe) id: string) {
+  deleteGenre(@Param('id', ValidateMongoIdPipe) id: string) {
     return this.actorService.delete(id);
   }
 }

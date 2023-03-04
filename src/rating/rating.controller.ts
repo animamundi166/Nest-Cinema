@@ -12,7 +12,7 @@ export class RatingController {
 
   @Get('/:movieId')
   @Auth()
-  async getMovieValueByUser(
+  getMovieValueByUser(
     @Param('movieId', ValidateMongoIdPipe) movieId: Types.ObjectId,
     @User('_id') userId: Types.ObjectId
   ) {
@@ -22,7 +22,7 @@ export class RatingController {
   @Post('set-rating')
   @HttpCode(200)
   @Auth()
-  async setRating(@User('_id') userId: Types.ObjectId, @Body() dto: RatingDto) {
+  setRating(@User('_id') userId: Types.ObjectId, @Body() dto: RatingDto) {
     return this.ratingService.setRating(userId, dto);
   }
 }

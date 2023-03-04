@@ -40,8 +40,7 @@
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^4.1.2",
-    "rxjs": "^7.8.0",
-    "telegraf": "^4.11.2"
+    "rxjs": "^7.8.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.2.0",

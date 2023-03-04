@@ -9,18 +9,18 @@ export class AuthController {
 
   @HttpCode(200)
   @Post('login')
-  async login(@Body() dto: AuthDto) {
+  login(@Body() dto: AuthDto) {
     return this.authService.login(dto);
   }
 
   @HttpCode(200)
   @Post('login/access-token')
-  async getNewTokens(@Body() dto: RefreshTokenDto) {
+  getNewTokens(@Body() dto: RefreshTokenDto) {
     return this.authService.getNewTokens(dto);
   }
 
   @Post('register')
-  async register(@Body() dto: AuthDto) {
+  register(@Body() dto: AuthDto) {
     return this.authService.register(dto);
   }
 }
